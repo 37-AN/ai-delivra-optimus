@@ -5,6 +5,7 @@ import DeliveryPrediction from '@/components/DeliveryPrediction';
 import CustomsValidation from '@/components/CustomsValidation';
 import MicroFulfillmentOptimization from '@/components/MicroFulfillmentOptimization';
 import BlockchainTracking from '@/components/BlockchainTracking';
+import CustomerDashboard from '@/components/CustomerDashboard';
 
 const Index = () => {
   return (
@@ -41,13 +42,14 @@ const Index = () => {
             <DeliveryMap />
           </div>
           <div className="space-y-4 md:space-y-6">
+            <CustomerDashboard />
             <DeliveryPrediction />
             <BlockchainTracking />
-            <CustomsValidation />
           </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:gap-6">
+          <CustomsValidation />
           <MicroFulfillmentOptimization />
         </div>
       </div>
