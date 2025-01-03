@@ -4,6 +4,7 @@ import MetricsCard from '@/components/MetricsCard';
 import DeliveryPrediction from '@/components/DeliveryPrediction';
 import CustomsValidation from '@/components/CustomsValidation';
 import MicroFulfillmentOptimization from '@/components/MicroFulfillmentOptimization';
+import BlockchainTracking from '@/components/BlockchainTracking';
 
 const Index = () => {
   return (
@@ -41,6 +42,7 @@ const Index = () => {
           </div>
           <div className="space-y-6">
             <DeliveryPrediction />
+            <BlockchainTracking />
             <CustomsValidation />
           </div>
         </div>
