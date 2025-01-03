@@ -3,6 +3,7 @@ import DeliveryMap from '@/components/DeliveryMap';
 import MetricsCard from '@/components/MetricsCard';
 import DeliveryPrediction from '@/components/DeliveryPrediction';
 import CustomsValidation from '@/components/CustomsValidation';
+import MicroFulfillmentOptimization from '@/components/MicroFulfillmentOptimization';
 
 const Index = () => {
   return (
@@ -42,6 +43,10 @@ const Index = () => {
             <DeliveryPrediction />
             <CustomsValidation />
           </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6">
+          <MicroFulfillmentOptimization />
         </div>
       </div>
     </div>
