@@ -30,30 +30,15 @@ export const initializeMapbox = (
     mapboxgl.accessToken = token;
     
     console.log('Creating new Mapbox instance');
-    const map = new mapboxgl.Map({
+    return new mapboxgl.Map({
       container,
       style: 'mapbox://styles/mapbox/light-v11',
       center: [28.0473, -26.2041], // Johannesburg coordinates
       zoom: 12,
       pitch: 45,
     });
-
-    console.log('Adding navigation controls');
-    map.addControl(
-      new mapboxgl.NavigationControl({
-        visualizePitch: true,
-      }),
-      'top-right'
-    );
-
-    return map;
   } catch (error) {
     console.error('Error initializing map:', error);
-    toast({
-      title: "Error initializing map",
-      description: error instanceof Error ? error.message : "Please check if your Mapbox token is valid",
-      variant: "destructive",
-    });
     return null;
   }
 };

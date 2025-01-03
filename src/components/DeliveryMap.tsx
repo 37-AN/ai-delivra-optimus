@@ -34,14 +34,17 @@ const DeliveryMap = () => {
     }
   ];
 
-  const initializeMap = () => {
-    console.log('Initializing map...');
+  useEffect(() => {
+    console.log('DeliveryMap component mounted');
+    
+    // Ensure the map container exists
     if (!mapContainer.current) {
       console.error('Map container ref is not available');
       return;
     }
 
     try {
+      console.log('Setting up map...');
       map.current = initializeMapbox(mapContainer.current, 'pk.eyJ1IjoicDNyYyIsImEiOiJjbTF3ZndwaXgwNzk1MmlxeWc3eG5hM24yIn0.vxUpLbJJCt-7m1LENw9lqQ');
       
       if (!map.current) {
@@ -58,14 +61,16 @@ const DeliveryMap = () => {
       
       map.current.on('load', () => {
         console.log('Map loaded event fired');
-        addMarkersToMap(map.current!, deliveryPoints);
-        const coordinates = deliveryPoints.map(point => point.coordinates);
-        drawRoute(map.current!, coordinates);
-        setIsMapInitialized(true);
-        toast({
-          title: "Map initialized successfully",
-          description: "The map is now ready to use",
-        });
+        if (map.current) {
+          addMarkersToMap(map.current, deliveryPoints);
+          const coordinates = deliveryPoints.map(point => point.coordinates);
+          drawRoute(map.current, coordinates);
+          setIsMapInitialized(true);
+          toast({
+            title: "Map initialized successfully",
+            description: "The map is now ready to use",
+          });
+        }
       });
 
       map.current.on('error', (e) => {
@@ -84,18 +89,15 @@ const DeliveryMap = () => {
         variant: "destructive",
       });
     }
-  };
 
-  useEffect(() => {
-    console.log('DeliveryMap component mounted');
-    initializeMap();
+    // Cleanup function
     return () => {
       console.log('Cleaning up map instance');
       if (map.current) {
         map.current.remove();
       }
     };
-  }, []);
+  }, []); // Empty dependency array to run only once on mount
 
   if (!isMapInitialized) {
     return (
@@ -111,8 +113,8 @@ const DeliveryMap = () => {
   return (
     <div className="space-y-4">
       <MapLegend />
-      <div className="relative w-full h-[500px] rounded-lg overflow-hidden">
-        <div ref={mapContainer} className="absolute inset-0" />
+      <div className="relative w-full h-[500px] rounded-lg overflow-hidden border border-gray-200">
+        <div ref={mapContainer} className="absolute inset-0" style={{ width: '100%', height: '100%' }} />
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent to-background/10" />
       </div>
     </div>
