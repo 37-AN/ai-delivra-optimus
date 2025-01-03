@@ -83,22 +83,21 @@ const DeliveryMap = () => {
   }, []);
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col space-y-4 h-full">
       <MapLegend />
-      <div className="relative w-full h-[500px] rounded-lg overflow-hidden border border-gray-200">
+      <div className="relative flex-1 min-h-[600px] w-full rounded-lg overflow-hidden border border-gray-200">
         <div 
           ref={mapContainer} 
-          className="absolute inset-0" 
-          style={{ width: '100%', height: '100%' }} 
+          className="absolute inset-0 w-full h-full" 
         />
-      </div>
-      {!isMapInitialized && (
-        <div className="absolute inset-0 flex items-center justify-center bg-background/50">
-          <div className="text-center p-4">
-            <p className="text-sm text-muted-foreground">Initializing map...</p>
+        {!isMapInitialized && (
+          <div className="absolute inset-0 flex items-center justify-center bg-background/50">
+            <div className="text-center p-4">
+              <p className="text-sm text-muted-foreground">Initializing map...</p>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

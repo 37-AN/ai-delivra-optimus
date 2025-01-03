@@ -8,14 +8,14 @@ import BlockchainTracking from '@/components/BlockchainTracking';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-gray-50/50 p-8">
-      <div className="max-w-7xl mx-auto space-y-8 animate-fade-in">
+    <div className="min-h-screen bg-gray-50/50 p-4 md:p-8">
+      <div className="max-w-7xl mx-auto space-y-6 md:space-y-8 animate-fade-in">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight">Delivery Optimization</h1>
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Delivery Optimization</h1>
           <p className="mt-2 text-gray-600">AI-powered delivery management for South Africa</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           <MetricsCard 
             title="On-Time Deliveries" 
             value="94.8%" 
@@ -36,18 +36,18 @@ const Index = () => {
           />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+          <div className="lg:col-span-2 h-full">
             <DeliveryMap />
           </div>
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             <DeliveryPrediction />
             <BlockchainTracking />
             <CustomsValidation />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-6">
+        <div className="grid grid-cols-1 gap-4 md:gap-6">
           <MicroFulfillmentOptimization />
         </div>
       </div>
