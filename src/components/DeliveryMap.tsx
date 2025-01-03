@@ -35,29 +35,65 @@ const DeliveryMap = () => {
   ];
 
   const initializeMap = () => {
-    if (!mapContainer.current) return;
+    console.log('Initializing map...');
+    if (!mapContainer.current) {
+      console.error('Map container ref is not available');
+      return;
+    }
 
-    map.current = initializeMapbox(mapContainer.current, 'pk.eyJ1IjoicDNyYyIsImEiOiJjbTF3ZndwaXgwNzk1MmlxeWc3eG5hM24yIn0.vxUpLbJJCt-7m1LENw9lqQ');
-    
-    if (map.current) {
+    try {
+      map.current = initializeMapbox(mapContainer.current, 'pk.eyJ1IjoicDNyYyIsImEiOiJjbTF3ZndwaXgwNzk1MmlxeWc3eG5hM24yIn0.vxUpLbJJCt-7m1LENw9lqQ');
+      
+      if (!map.current) {
+        console.error('Map initialization failed');
+        toast({
+          title: "Map initialization failed",
+          description: "Please check the console for more details",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      console.log('Map object created successfully');
+      
       map.current.on('load', () => {
+        console.log('Map loaded event fired');
         addMarkersToMap(map.current!, deliveryPoints);
         const coordinates = deliveryPoints.map(point => point.coordinates);
         drawRoute(map.current!, coordinates);
+        setIsMapInitialized(true);
+        toast({
+          title: "Map initialized successfully",
+          description: "The map is now ready to use",
+        });
       });
 
-      setIsMapInitialized(true);
+      map.current.on('error', (e) => {
+        console.error('Mapbox error:', e);
+        toast({
+          title: "Map error occurred",
+          description: e.error.message,
+          variant: "destructive",
+        });
+      });
+    } catch (error) {
+      console.error('Error during map initialization:', error);
       toast({
-        title: "Map initialized successfully",
-        description: "The map is now ready to use",
+        title: "Map initialization error",
+        description: error instanceof Error ? error.message : "An unknown error occurred",
+        variant: "destructive",
       });
     }
   };
 
   useEffect(() => {
+    console.log('DeliveryMap component mounted');
     initializeMap();
     return () => {
-      map.current?.remove();
+      console.log('Cleaning up map instance');
+      if (map.current) {
+        map.current.remove();
+      }
     };
   }, []);
 

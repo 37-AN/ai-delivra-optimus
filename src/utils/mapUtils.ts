@@ -26,8 +26,10 @@ export const initializeMapbox = (
   token: string
 ): mapboxgl.Map | null => {
   try {
+    console.log('Setting Mapbox access token');
     mapboxgl.accessToken = token;
     
+    console.log('Creating new Mapbox instance');
     const map = new mapboxgl.Map({
       container,
       style: 'mapbox://styles/mapbox/light-v11',
@@ -36,6 +38,7 @@ export const initializeMapbox = (
       pitch: 45,
     });
 
+    console.log('Adding navigation controls');
     map.addControl(
       new mapboxgl.NavigationControl({
         visualizePitch: true,
@@ -48,7 +51,7 @@ export const initializeMapbox = (
     console.error('Error initializing map:', error);
     toast({
       title: "Error initializing map",
-      description: "Please check if your Mapbox token is valid",
+      description: error instanceof Error ? error.message : "Please check if your Mapbox token is valid",
       variant: "destructive",
     });
     return null;
@@ -56,6 +59,7 @@ export const initializeMapbox = (
 };
 
 export const addMarkersToMap = (map: mapboxgl.Map, points: RoutePoint[]) => {
+  console.log('Adding markers to map');
   points.forEach((point, index) => {
     const el = document.createElement('div');
     el.className = 'marker';
@@ -84,6 +88,7 @@ export const addMarkersToMap = (map: mapboxgl.Map, points: RoutePoint[]) => {
 };
 
 export const drawRoute = (map: mapboxgl.Map, coordinates: [number, number][]) => {
+  console.log('Drawing route on map');
   if (map.getSource('route')) {
     (map.getSource('route') as mapboxgl.GeoJSONSource).setData({
       type: 'Feature',
