@@ -7,6 +7,7 @@ import MicroFulfillmentOptimization from '@/components/MicroFulfillmentOptimizat
 import BlockchainTracking from '@/components/BlockchainTracking';
 import CustomerDashboard from '@/components/CustomerDashboard';
 import SustainabilityInsights from '@/components/SustainabilityInsights';
+import EnhancedAIFeatures from '@/components/EnhancedAIFeatures';
 
 const Index = () => {
   return (
@@ -48,6 +49,8 @@ const Index = () => {
             <BlockchainTracking />
           </div>
         </div>
+
+        <EnhancedAIFeatures />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <CustomsValidation />
