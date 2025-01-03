@@ -2,6 +2,7 @@ import React from 'react';
 import DeliveryMap from '@/components/DeliveryMap';
 import MetricsCard from '@/components/MetricsCard';
 import DeliveryPrediction from '@/components/DeliveryPrediction';
+import CustomsValidation from '@/components/CustomsValidation';
 
 const Index = () => {
   return (
@@ -37,8 +38,9 @@ const Index = () => {
           <div className="lg:col-span-2">
             <DeliveryMap />
           </div>
-          <div>
+          <div className="space-y-6">
             <DeliveryPrediction />
+            <CustomsValidation />
           </div>
         </div>
       </div>
