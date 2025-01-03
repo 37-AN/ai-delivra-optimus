@@ -6,6 +6,7 @@ import CustomsValidation from '@/components/CustomsValidation';
 import MicroFulfillmentOptimization from '@/components/MicroFulfillmentOptimization';
 import BlockchainTracking from '@/components/BlockchainTracking';
 import CustomerDashboard from '@/components/CustomerDashboard';
+import SustainabilityInsights from '@/components/SustainabilityInsights';
 
 const Index = () => {
   return (
@@ -48,8 +49,12 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <CustomsValidation />
+          <SustainabilityInsights />
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 md:gap-6">
           <MicroFulfillmentOptimization />
         </div>
       </div>
