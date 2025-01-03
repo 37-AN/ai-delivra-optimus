@@ -35,88 +35,70 @@ const DeliveryMap = () => {
   ];
 
   useEffect(() => {
-    console.log('DeliveryMap component mounted');
-    
-    // Ensure the map container exists
     if (!mapContainer.current) {
       console.error('Map container ref is not available');
       return;
     }
 
-    try {
-      console.log('Setting up map...');
-      map.current = initializeMapbox(mapContainer.current, 'pk.eyJ1IjoicDNyYyIsImEiOiJjbTF3ZndwaXgwNzk1MmlxeWc3eG5hM24yIn0.vxUpLbJJCt-7m1LENw9lqQ');
-      
-      if (!map.current) {
-        console.error('Map initialization failed');
-        toast({
-          title: "Map initialization failed",
-          description: "Please check the console for more details",
-          variant: "destructive",
-        });
-        return;
-      }
+    let mounted = true;
 
-      console.log('Map object created successfully');
-      
-      map.current.on('load', () => {
-        console.log('Map loaded event fired');
-        if (map.current) {
+    const initMap = async () => {
+      try {
+        console.log('Initializing map...');
+        const mapInstance = initializeMapbox(mapContainer.current, 'pk.eyJ1IjoicDNyYyIsImEiOiJjbTF3ZndwaXgwNzk1MmlxeWc3eG5hM24yIn0.vxUpLbJJCt-7m1LENw9lqQ');
+        
+        if (!mapInstance || !mounted) return;
+        
+        map.current = mapInstance;
+        
+        map.current.on('load', () => {
+          if (!map.current || !mounted) return;
+          
+          console.log('Map loaded successfully');
           addMarkersToMap(map.current, deliveryPoints);
           const coordinates = deliveryPoints.map(point => point.coordinates);
           drawRoute(map.current, coordinates);
           setIsMapInitialized(true);
+        });
+      } catch (error) {
+        console.error('Map initialization error:', error);
+        if (mounted) {
           toast({
-            title: "Map initialized successfully",
-            description: "The map is now ready to use",
+            title: "Map initialization failed",
+            description: error instanceof Error ? error.message : "An unknown error occurred",
+            variant: "destructive",
           });
         }
-      });
+      }
+    };
 
-      map.current.on('error', (e) => {
-        console.error('Mapbox error:', e);
-        toast({
-          title: "Map error occurred",
-          description: e.error.message,
-          variant: "destructive",
-        });
-      });
-    } catch (error) {
-      console.error('Error during map initialization:', error);
-      toast({
-        title: "Map initialization error",
-        description: error instanceof Error ? error.message : "An unknown error occurred",
-        variant: "destructive",
-      });
-    }
+    initMap();
 
-    // Cleanup function
     return () => {
-      console.log('Cleaning up map instance');
+      mounted = false;
       if (map.current) {
         map.current.remove();
       }
     };
-  }, []); // Empty dependency array to run only once on mount
-
-  if (!isMapInitialized) {
-    return (
-      <div className="space-y-4 p-4 border rounded-lg">
-        <h3 className="text-lg font-medium">Initializing Map...</h3>
-        <p className="text-sm text-gray-500">
-          Please wait while the map loads...
-        </p>
-      </div>
-    );
-  }
+  }, []);
 
   return (
     <div className="space-y-4">
       <MapLegend />
       <div className="relative w-full h-[500px] rounded-lg overflow-hidden border border-gray-200">
-        <div ref={mapContainer} className="absolute inset-0" style={{ width: '100%', height: '100%' }} />
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent to-background/10" />
+        <div 
+          ref={mapContainer} 
+          className="absolute inset-0" 
+          style={{ width: '100%', height: '100%' }} 
+        />
       </div>
+      {!isMapInitialized && (
+        <div className="absolute inset-0 flex items-center justify-center bg-background/50">
+          <div className="text-center p-4">
+            <p className="text-sm text-muted-foreground">Initializing map...</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,5 +1,4 @@
 import mapboxgl from 'mapbox-gl';
-import { toast } from '@/components/ui/use-toast';
 
 export interface RoutePoint {
   coordinates: [number, number];
@@ -24,27 +23,19 @@ export const getPriorityColor = (priority: string): string => {
 export const initializeMapbox = (
   container: HTMLDivElement,
   token: string
-): mapboxgl.Map | null => {
-  try {
-    console.log('Setting Mapbox access token');
-    mapboxgl.accessToken = token;
-    
-    console.log('Creating new Mapbox instance');
-    return new mapboxgl.Map({
-      container,
-      style: 'mapbox://styles/mapbox/light-v11',
-      center: [28.0473, -26.2041], // Johannesburg coordinates
-      zoom: 12,
-      pitch: 45,
-    });
-  } catch (error) {
-    console.error('Error initializing map:', error);
-    return null;
-  }
+): mapboxgl.Map => {
+  mapboxgl.accessToken = token;
+  
+  return new mapboxgl.Map({
+    container,
+    style: 'mapbox://styles/mapbox/light-v11',
+    center: [28.0473, -26.2041],
+    zoom: 12,
+    pitch: 45,
+  });
 };
 
 export const addMarkersToMap = (map: mapboxgl.Map, points: RoutePoint[]) => {
-  console.log('Adding markers to map');
   points.forEach((point, index) => {
     const el = document.createElement('div');
     el.className = 'marker';
@@ -55,60 +46,39 @@ export const addMarkersToMap = (map: mapboxgl.Map, points: RoutePoint[]) => {
     el.style.border = '2px solid white';
     el.style.boxShadow = '0 2px 4px rgba(0,0,0,0.2)';
 
-    const popup = new mapboxgl.Popup({ offset: 25 })
-      .setHTML(`
-        <div class="p-2">
-          <div class="font-bold">Delivery Point ${index + 1}</div>
-          <div>Priority: ${point.priority}</div>
-          <div>Weather: ${point.weather}</div>
-          <div>Traffic: ${point.traffic}</div>
-        </div>
-      `);
-
     new mapboxgl.Marker(el)
       .setLngLat(point.coordinates)
-      .setPopup(popup)
       .addTo(map);
   });
 };
 
 export const drawRoute = (map: mapboxgl.Map, coordinates: [number, number][]) => {
-  console.log('Drawing route on map');
-  if (map.getSource('route')) {
-    (map.getSource('route') as mapboxgl.GeoJSONSource).setData({
-      type: 'Feature',
-      properties: {},
-      geometry: {
-        type: 'LineString',
-        coordinates
-      }
-    });
-  } else {
-    map.addSource('route', {
-      type: 'geojson',
-      data: {
-        type: 'Feature',
-        properties: {},
-        geometry: {
-          type: 'LineString',
-          coordinates
-        }
-      }
-    });
+  const geojson = {
+    type: 'Feature',
+    properties: {},
+    geometry: {
+      type: 'LineString',
+      coordinates
+    }
+  };
 
-    map.addLayer({
-      id: 'route',
-      type: 'line',
-      source: 'route',
-      layout: {
-        'line-join': 'round',
-        'line-cap': 'round'
-      },
-      paint: {
-        'line-color': '#3b82f6',
-        'line-width': 4,
-        'line-opacity': 0.8
-      }
-    });
-  }
+  map.addSource('route', {
+    type: 'geojson',
+    data: geojson as any
+  });
+
+  map.addLayer({
+    id: 'route',
+    type: 'line',
+    source: 'route',
+    layout: {
+      'line-join': 'round',
+      'line-cap': 'round'
+    },
+    paint: {
+      'line-color': '#3b82f6',
+      'line-width': 4,
+      'line-opacity': 0.8
+    }
+  });
 };
